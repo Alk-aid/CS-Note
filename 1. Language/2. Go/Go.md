@@ -9,18 +9,19 @@
 
 | 类型               | 32位编译器 | 64位编译器 | 本质                                        |
 | ------------------ | ---------- | ---------- | ------------------------------------------- |
+| bool               |            |            |                                             |
+| string             |            |            |                                             |
+|                    |            |            |                                             |
 | int8/uint8(byte)   | 1          | 1          | signed char/unsigned char                   |
 | int16/uint16       | 2          | 2          | signed short/unsigned short                 |
 | int32(rune)/uint32 | 4          | 4          | signed int/unsigned int                     |
 | int64/uint64       | 8          | 8          | signed long long int/unsigned long long int |
 | int / uint         | 4          | 8          | 根据机器位数决定长度                        |
+| uintptr            | 4          | 8          | 根据机器位数决定长度 uint32/uint64          |
+|                    |            |            |                                             |
 | float32            | 4          | 4          | float                                       |
 | float64            | 8          | 8          | double                                      |
-| true               | 1          | 1          | char类型的整型                              |
-| false              | 1          | 1          | char类型的整型                              |
-| uintptr            | 4          | 8          | 根据机器位数决定长度 uint32/uint64          |
-
-
+|                    |            |            |                                             |
 
 - 复合类型：struct，array，slice，map，channel
   - 使用nil作为默认值
@@ -46,8 +47,6 @@ var( // 一行定义多个
     num9, num10 = 9.99, 100
 )
 ```
-
-
 
 ## 1.3 常量的声明初始化
 
@@ -203,11 +202,40 @@ a("hello lnj")
 - 也就是说只要匿名函数中用到了外界的变量, 那么这个匿名函数就是一个闭包
 - 只要闭包还在使用外界的变量, 那么外界的变量就会一直存在
 
+```go
+package main
+
+import "fmt"
+
+func adder() func(int) int {
+	sum := 0
+	return func(x int) int {
+		sum += x
+		return sum
+	}
+}
+
+func main() {
+	pos, neg := adder(), adder()
+	for i := 0; i < 10; i++ {
+		fmt.Println(
+			pos(i),
+			neg(-2*i),
+		)
+	}
+}
+
+```
+
 ## 2.4 defer
 
 - Go语言提供了defer语句用于实现其它面向对象语言析构函数的功能
+
 - defer语句常用于`释放资源`、`解除锁定`以及`错误处理`等
-- 无论你在什么地方注册defer语句,它都会在所属函数执行完毕之后才会执行, 并且如果注册了多个defer语句,那么它们会按照`后进先出`的原则执行
+
+- defer调用的参数会立即计算，但是函数执行会在所属函数执行完毕之后才会执行, 并且如果注册了多个defer语句,那么它们会按照`后进先出`的原则执行
+
+  
 
 ## 2.5 init函数
 
@@ -223,6 +251,7 @@ a("hello lnj")
 
 - Go语言中的方法`一般用于`将`函数和结构体绑定在一起`, 让结构体除了能够保存数据外还能具备某些行为
 - 将函数和数据类型绑定的格式： 只需要在函数名称前面加上(接收者 数据类型), 即可将函数和某种数据类型绑定在一起
+- 方法接收者在它自己的参数列表内，位于 `func` 关键字和方法名之间
 
 ```go
 func (接收者 数据类型)方法名称(形参列表)(返回值列表){
@@ -253,6 +282,8 @@ func main() {
 # 3. 流程控制
 
 ## 3.1 if
+
+在 `if` 的初始化语句中声明的变量同样可以在任何对应的 `else` 块中使用
 
 ```go
 if 初始化语句; 条件表达式{
@@ -293,11 +324,17 @@ switch num := 3;num {
 
 ## 3.3 for
 
+
+
 ```go
 for 初始化表达式；循环条件表达式；循环后的操作表达式 {
     循环体语句;
 }
 for i:=0; i<10; i++{
+    fmt.Println(i)
+}
+// 简化为while
+for i < 10 {
     fmt.Println(i)
 }
 ```
@@ -315,6 +352,9 @@ arr := [3]int{1, 3, 5}
 for i, v := range arr{
     fmt.Println(i, v)
 }
+// 其他形式
+for in, _ := range pow
+for _, value := range pow
 ```
 
 ## 3.4 跳转
@@ -405,13 +445,16 @@ var sce = []int{1, 3, 5}
 - 增：append函数会在切片`末尾`添加一个元素, 并返回一个追加数据之后的切片，如果追加之后没有超出切片的容量,那么返回原来的切片, 如果追加之后超出了切片的容量,那么返回一个新的切片；每次扩容是原来的两倍
 
 ```go
-sce = append(sce, 666)
+// 
+func append(s []T, vs ...T) []T
 ```
 
 - 改：通过`切片名称[索引]`方式操作切片
 - 复制: 格式: `copy(目标切片, 源切片)`, 会将源切片中数据拷贝到目标切片中
 - 切片只支持判断是否为nil, 不支持==、!=判断
 - 字符串的底层是[]byte数组, 所以字符也支持切片相关操作
+
+> A nil slice has a length and capacity of 0 and has no underlying array.
 
 ## 4.3 map
 
@@ -465,8 +508,6 @@ if value, ok := dict["age"]; ok{
     fmt.Println("有age这个key,值为", value)
 }
 ```
-
-
 
 # 5. 可见性
 
@@ -603,7 +644,7 @@ func main() {
 
 # 9. 接口
 
-- 定义接口
+- 定义接口, **接口类型** 是由一组方法签名定义的集合。
 
 ```go
 type 接口名称 interface{
@@ -925,6 +966,8 @@ func main() {
 ```
 
 # 13. 管道
+
+
 
 # 14. 开源书籍
 
