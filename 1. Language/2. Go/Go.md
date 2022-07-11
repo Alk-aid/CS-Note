@@ -33,9 +33,10 @@
 1. 单个声明
 
 ```go
+// 可以用于函数级别 和 包级别
 var <变量名称> <数据类型> = <值>;
 var <变量名称> = <值>;
-// 只能用于局部变量
+// 只能用于局部变量，也就是用于函数中
 <变量名称> := <值>;
 ```
 
@@ -339,7 +340,7 @@ for i < 10 {
 }
 ```
 
-for...rangr
+for...range
 
 ```go
 for 索引, 值 := range 被遍历数据{
@@ -875,7 +876,9 @@ func main() {
 }
 ```
 
-# 12. Go并发
+# 12. Go并发  
+
+## 12.1 goroutine
 
 - Go在语言级别支持`协程`(多数语言在语法层面并不直接支持协程), 叫做goroutine. 
 
@@ -920,52 +923,164 @@ func main() {
   - Goexit: 终止调用它的go程, 其它go程不会受影响
   - NumCPU: 返回本地机器的逻辑CPU个数
   - GOMAXPROCS: 设置可同时执行的最大CPU数，并返回先前的设置
+### 12.2 sync
 
-- 互斥锁
-  + 互斥锁的本质是当一个goroutine访问的时候, 其它goroutine都不能访问
-  + 这样就能实现资源同步, 但是在避免资源竞争的同时也降低了程序的并发性能. 程序由原来的并发执行变成了串行
-- 案例: 
-  + 有一个打印函数, 用于逐个打印字符串中的字符, 有两个人都开启了goroutine去打印
-  + 如果没有添加互斥锁, 那么两个人都有机会输出自己的内容
-  + 如果添加了互斥锁, 那么会先输出某一个的, 输出完毕之后再输出另外一个人的
+Mutex
+
+```go
+mutex := &sync.Mutex{}
+
+mutex.Lock()
+// Update共享变量 (比如切片，结构体指针等)
+mutex.Unlock()
+```
+
+WaitGroup: 在一个`goroutine`等待一组`goroutine`执行完成
+
+- `sync.WaitGroup`拥有一个内部计数器。当计数器等于`0`时，则`Wait()`方法会立即返回。否则它将阻塞执行`Wait()`方法的`goroutine`直到计数器等于`0`时为止
+- 要增加计数器，我们必须使用`Add(int)`方法。要减少它，我们可以使用`Done()`（将计数器减`1`），也可以传递负数给`Add`方法把计数器减少指定大小，`Done()`方法底层就是`Add(-1)`
+
+```go
+wg := &sync.WaitGroup{}
+
+for i := 0; i < 8; i++ {
+  wg.Add(1)
+  go func() {
+    // Do something
+    wg.Done()
+  }()
+}
+
+wg.Wait()
+// 继续往下执行...
+```
+
+Map:
+
+- 使用`Store(interface {}，interface {})`添加元素。
+- 使用`Load(interface {}) interface {}`检索元素。
+- 使用`Delete(interface {})`删除元素。
+- 使用`LoadOrStore(interface {}，interface {}) (interface {}，bool)`检索或添加之前不存在的元素。如果键之前在`map`中存在，则返回的布尔值为`true`。
+- 使用`Range`遍历元素。
+
+```go
+m := &sync.Map{}
+
+// 添加元素
+m.Store(1, "one")
+m.Store(2, "two")
+
+// 获取元素1
+value, contains := m.Load(1)
+if contains {
+  fmt.Printf("%s\n", value.(string))
+}
+
+// 返回已存value，否则把指定的键值存储到map中
+value, loaded := m.LoadOrStore(3, "three")
+if !loaded {
+  fmt.Printf("%s\n", value.(string))
+}
+
+m.Delete(3)
+
+// 迭代所有元素
+m.Range(func(key, value interface{}) bool {
+  fmt.Printf("%d: %s\n", key.(int), value.(string))
+  return true
+})
+```
+
+
+
+# 13. 管道
+
+1. 信道的创建
+
+```go
+//第二个参数为信道长度，当填满后，向信道发送数据会被阻塞
+ch := make(chan int, 100)
+
+```
+
+2. 信道的使用
+
 ```go
 package main
-import (
-	"fmt"
-	"sync"
-	"time"
-)
-// 创建一把互斥锁
-var lock sync.Mutex
 
-func printer(str string)  {
-	// 让先来的人拿到锁, 把当前函数锁住, 其它人都无法执行
-	// 上厕所关门
-	lock.Lock()
-	for _, v := range str{
-		fmt.Printf("%c", v)
-		time.Sleep(time.Millisecond * 500)
+import "fmt"
+
+func sum(s []int, c chan int) {
+	sum := 0
+	for _, v := range s {
+		sum += v
 	}
-	// 先来的人执行完毕之后, 把锁释放掉, 让其它人可以继续使用当前函数
-	// 上厕所开门
-	lock.Unlock()
+	c <- sum // 将和送入 c
 }
-func person1()  {
-	printer("hello")
-}
-func person2()  {
-	printer("world")
-}
+
 func main() {
-	go person1()
-	go person2()
-	for{
-		;
+	s := []int{7, 2, 8, -9, 4, 0}
+
+	c := make(chan int)
+	go sum(s[:len(s)/2], c)
+	go sum(s[len(s)/2:], c)
+	x, y := <-c, <-c // 从 c 中接收
+
+	fmt.Println(x, y, x+y)
+}
+```
+
+3. range 和 close
+
+- 发送者可通过 `close` 关闭一个信道来表示没有需要发送的值了; 
+
+```go
+// 若没有值可以接收且信道已被关闭，那么在执行完之后 ok 会被设置为 false
+v, ok := <-ch
+```
+
+- 循环 `for i := range c` 会不断从信道接收值，直到它被关闭
+
+```go
+func fibonacci(n int, c chan int) {
+	x, y := 0, 1
+	for i := 0; i < n; i++ {
+		c <- x
+		x, y = y, x+y
+	}
+	close(c)
+}
+
+func main() {
+	c := make(chan int, 10)
+	go fibonacci(cap(c), c)
+	for i := range c {
+		fmt.Println(i)
 	}
 }
 ```
 
-# 13. 管道
+4. select: 会阻塞到某个分支可以继续执行为止，这时就会执行该分支。当多个分支都准备好时会随机选择一个执行;当 `select` 中的其它分支都没有准备好时，`default` 分支就会执行
+
+```go
+
+func main() {
+	tick := time.Tick(100 * time.Millisecond)
+	boom := time.After(500 * time.Millisecond)
+	for {
+		select {
+		case <-tick:
+			fmt.Println("tick.")
+		case <-boom:
+			fmt.Println("BOOM!")
+			return
+		default:
+			fmt.Println("    .")
+			time.Sleep(50 * time.Millisecond)
+		}
+	}
+}
+```
 
 
 
@@ -986,3 +1101,207 @@ func main() {
 - [Effective Go](https://golang.org/doc/effective_go.html) 英文版
 - [The Way to Go](https://github.com/Unknwon/the-way-to-go_ZH_CN) 中文版
 - [《Learning Go》](https://github.com/miekg/gobook)英文版
+
+
+
+# 15. 举例子
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+//
+// Several solutions to the crawler exercise from the Go tutorial
+// https://tour.golang.org/concurrency/10
+//
+
+//
+// Serial crawler
+//
+
+// map不使用指针传递是因为map底层就包含指针
+c Serial(url string, fetcher Fetcher, fetched map[string]bool) {
+	if fetched[url] {
+		return
+	}
+	fetched[url] = true
+	urls, err := fetcher.Fetch(url)
+	if err != nil {
+		return
+	}
+	for _, u := range urls {
+		Serial(u, fetcher, fetched)
+	}
+	return
+}
+
+//
+// Concurrent crawler with shared state and Mutex
+//
+
+type fetchState struct {
+	mu      sync.Mutex
+	fetched map[string]bool
+}
+
+func ConcurrentMutex(url string, fetcher Fetcher, f *fetchState) {
+	f.mu.Lock()
+	already := f.fetched[url]
+	f.fetched[url] = true
+	f.mu.Unlock()
+
+	if already {
+		return
+	}
+
+	urls, err := fetcher.Fetch(url)
+	if err != nil {
+		return
+	}
+	var done sync.WaitGroup
+	for _, u := range urls {
+		done.Add(1)
+    // 这里有函数闭包的问题
+		u2 := u
+		go func() {
+      // 如果不使用defer，然后把done.Done放在couurentmutex后面的话，那可能因为goroutine中出现错误而执行不了done
+			defer done.Done()
+			ConcurrentMutex(u2, fetcher, f)
+		}()
+		//go func(u string) {
+		//	defer done.Done()
+		//	ConcurrentMutex(u, fetcher, f)
+		//}(u)
+	}
+	done.Wait()
+	return
+}
+
+func makeState() *fetchState {
+	f := &fetchState{}
+	f.fetched = make(map[string]bool)
+	return f
+}
+
+//
+// Concurrent crawler with channels
+//
+
+func worker(url string, ch chan []string, fetcher Fetcher) {
+	urls, err := fetcher.Fetch(url)
+	if err != nil {
+		ch <- []string{}
+	} else {
+		ch <- urls
+	}
+}
+
+func master(ch chan []string, fetcher Fetcher) {
+	n := 1
+	fetched := make(map[string]bool)
+	for urls := range ch {
+		for _, u := range urls {
+			if fetched[u] == false {
+				fetched[u] = true
+				n += 1
+				go worker(u, ch, fetcher)
+			}
+		}
+		n -= 1
+		if n == 0 {
+			break
+		}
+	}
+}
+
+func ConcurrentChannel(url string, fetcher Fetcher) {
+	ch := make(chan []string)
+	go func() {
+		ch <- []string{url}
+	}()
+	master(ch, fetcher)
+}
+
+//
+// main
+//
+
+func main() {
+	fmt.Printf("=== Serial===\n")
+	Serial("http://golang.org/", fetcher, make(map[string]bool))
+
+	fmt.Printf("=== ConcurrentMutex ===\n")
+	ConcurrentMutex("http://golang.org/", fetcher, makeState())
+
+	fmt.Printf("=== ConcurrentChannel ===\n")
+	ConcurrentChannel("http://golang.org/", fetcher)
+}
+
+//
+// Fetcher
+//
+
+type Fetcher interface {
+	// Fetch returns a slice of URLs found on the page.
+	Fetch(url string) (urls []string, err error)
+}
+
+// fakeFetcher is Fetcher that returns canned results.
+type fakeFetcher map[string]*fakeResult
+
+type fakeResult struct {
+	body string
+	urls []string
+}
+
+func (f fakeFetcher) Fetch(url string) ([]string, error) {
+	if res, ok := f[url]; ok {
+		fmt.Printf("found:   %s\n", url)
+		return res.urls, nil
+	}
+	fmt.Printf("missing: %s\n", url)
+	return nil, fmt.Errorf("not found: %s", url)
+}
+
+// fetcher is a populated fakeFetcher.
+var fetcher = fakeFetcher{
+	"http://golang.org/": &fakeResult{
+		"The Go Programming Language",
+		[]string{
+			"http://golang.org/pkg/",
+			"http://golang.org/cmd/",
+		},
+	},
+	"http://golang.org/pkg/": &fakeResult{
+		"Packages",
+		[]string{
+			"http://golang.org/",
+			"http://golang.org/cmd/",
+			"http://golang.org/pkg/fmt/",
+			"http://golang.org/pkg/os/",
+		},
+	},
+	"http://golang.org/pkg/fmt/": &fakeResult{
+		"Package fmt",
+		[]string{
+			"http://golang.org/",
+			"http://golang.org/pkg/",
+		},
+	},
+	"http://golang.org/pkg/os/": &fakeResult{
+		"Package os",
+		[]string{
+			"http://golang.org/",
+			"http://golang.org/pkg/",
+		},
+	},
+}
+
+```
+
+
+
