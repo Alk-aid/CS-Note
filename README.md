@@ -1,4 +1,3 @@
-# Note
 ```
 ├── 1. Language
 │   ├── 1. Java
