@@ -27,15 +27,7 @@ Drain: An Online Log Parsing Approach with Fixed Depth Tree
 - `depth`: 规定所有叶子结点的深度为depth, 从而限制了搜索过程中的节点数量，从而大大提高搜索效率
 - `maxChild`: 为了避免树分支爆炸, 限制一个节点的最大子节点数量
 
-
-
-
-
-
-
-
-
-# 4. METHODOLOGY
+# 2. METHODOLOGY
 
 1. search a log group (i.e., leaf node of the tree) by following the specially-designed rules encoded in the internal nodes of the tree
 2. If a suitable log group is found, the log message will be matched with the log event stored in that log group
@@ -66,7 +58,7 @@ Drain: An Online Log Parsing Approach with Fixed Depth Tree
 - `depth`: 规定所有叶子结点的深度为depth, 从而限制了搜索过程中的节点数量，从而大大提高搜索效率
 - `maxChild`: 为了避免树分支爆炸, 限制一个节点的最大子节点数量
 
-## 4.2 Step1: Preprocess by Domain Knowledge
+## 2.2 Step1: Preprocess by Domain Knowledge
 
 > 预处理是否就是找到variable部门
 
@@ -75,7 +67,7 @@ Drain: An Online Log Parsing Approach with Fixed Depth Tree
 - 基于domain knowledge 提供简单的Regex, 比如IP address and block ID
 - 然后从raw log message中删除这些Regex所匹配的token
 
-## 4.3 Step2: Search by Log Message Length
+## 2.3 Step2: Search by Log Message Length
 
 如何根据编码的规则遍历parse tree并最终找到一个叶子结点
 
@@ -84,7 +76,7 @@ Drain: An Online Log Parsing Approach with Fixed Depth Tree
 - log message length: the number of tokens in a log message
 - 这是基于一种假说：具有相同日志事件的日志消息可能具有相同的日志消息长度
 
-## 4.4 Step3: Search by Preceding Tokens
+## 2.4 Step3: Search by Preceding Tokens
 
 基于的假说：日志消息开始的token更有可能是一个常量
 
@@ -96,7 +88,7 @@ Drain: An Online Log Parsing Approach with Fixed Depth Tree
 - 在这一步对于含有参数的token进行特殊对待，it will match a special internal node "*"
 - 如果一个节点有maxChild 子节点了，那么之后任何不匹配的token都将match node "*"
 
-##  Step4: Search by Token Similarity
+##  2.5 Step4: Search by Token Similarity
 
 背景：
 
@@ -125,7 +117,7 @@ $$
 - 找到largest SimSeq以后，将其和predefined similarity threshold st进行对比，如果大于st则将对应log group作为最适合的日志组
 - 否则返回一个flag(e.g None in Python) to indicate no suitable log group
 
-## 4.6 Step5: Update the Parse Tree
+## 2.6 Step5: Update the Parse Tree
 
 1. 如果找到了一个suitable log group
 
