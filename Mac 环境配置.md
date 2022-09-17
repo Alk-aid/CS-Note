@@ -72,7 +72,7 @@ brew update
 brew cask install iterm2
 ```
 
-## git
+## Git
 
 个人信息配置
 
