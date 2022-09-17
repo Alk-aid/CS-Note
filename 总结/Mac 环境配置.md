@@ -10,10 +10,6 @@
 
 - **control 和 cap 互换**: 设置 -> 键盘 -> 修饰键
 
-修改用户名:
-
-
-
 # 2. 日常软件安装
 
 ## 2.1 Alfred
@@ -26,11 +22,13 @@
 
 ## 2.4 cheatsheet
 
+## 2.5 sublime
 
 
-# 3. 开发软件
 
-## 3.1 Homebrew
+# 3. 终端环境
+
+## Homebrew
 
 > https://zhuanlan.zhihu.com/p/90508170
 
@@ -44,7 +42,7 @@
 
 ```shell
 # 具体参照终端给出的 Next steps
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/sunyueshuai/.zprofile
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/sls/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"
 ```
 
@@ -74,14 +72,79 @@ brew update
 brew cask install iterm2
 ```
 
+## git
+
+个人信息配置
+
+```sh
+git config --global user.email "xxx"
+git config --global user.name "xxx"
+git config --global color.ui true
+git config --global alias.co checkout  # 别名
+git config --global alias.ci commit
+git config --global alias.st status
+git config --global alias.br branch
+git config --global core.editor "vim"  # 设置Editor使用vim
+git config --global core.quotepath false # 设置显示中文文件名
+```
+
+代理加快:
+
+```sh
+git config --global http.proxy 127.0.0.1:7890
+git config --global https.proxy 127.0.0.1:7890
+```
+
+取消代理
+
+```sh
+git config --global --unset http.proxy
+git config --global --unset https.proxy
+```
+
+查看配置
+
+```shell
+git config --global  --list
+```
+
+
+
+
+
 ## vim
+
+vundle管理插件
+
+```sh
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+```
+
+```shell
+syntax on
+
+set number
+set mouse=a
+set autoindent
+set smartindent
+set cindent
+
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set smarttab
+
+set hlsearch
+
+set showmatch
+```
 
 ## zsh
 
 1. 安装 oh-my-zsh
 
 ```shell
-sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"	
+sh -c "$(curl -fsSL https://gitee.com/mirrors/oh-my-zsh/raw/master/tools/install.sh)"
 ```
 
 2. 安装 zsh-autosuggestion 与 autojump：
@@ -91,7 +154,7 @@ sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/i
 brew install autojump
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
 git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
-
+# 修改 ~/.zshrc文件
 plugins=(git zsh-autosuggestions autojump zsh-syntax-highlighting)
 source ~/.zshrc
 ```
@@ -100,50 +163,21 @@ source ~/.zshrc
 
 ```shell
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
-# 修改 THEME
-ZSH_THEME="powerlevel10k/powerlevel10k
+# 修改 ~/.zshrc文件
+ZSH_THEME="powerlevel10k/powerlevel10k"
 source ~/.zshrc
 ```
 
+# 4. 开发环境
 
-
-
-
-## git
-
-个人信息配置
-
-
-
-代理加快:
-
-```
-git config --global http.proxy 127.0.0.1:7890
-git config --global https.proxy 127.0.0.1:7890
-```
-
-取消代理
-
-```
-git config --global --unset http.proxy
-git config --global --unset https.proxy
-```
-
-
-
-# 4. Java环境
-
-## 4.1 JDK
+## JDK
 
 > https://www.azul.com/downloads/?package=jdk
 >
 > 选 macOS ARM 64-bit v8 版本
 >
-> 或者使用
->
-> brew install openjdk
 
-## 4.2 Maven
+## Maven
 
 安装
 
@@ -184,6 +218,8 @@ mvn -v
 ```
 
 IDEA 配置 Maven
+
+## Mysql
 
 
 
