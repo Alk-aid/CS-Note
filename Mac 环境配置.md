@@ -12,17 +12,23 @@
 
 # 2. 日常软件安装
 
-## 2.1 Alfred
 
-## 2.2 Typora
 
-主题: https://github.com/Theigrams/My-Typora-Themes
-
-## 2.3 snipaste
-
-## 2.4 cheatsheet
-
-## 2.5 sublime
+- 分屏: rectangle 
+- 剪切板: pasteNow, Paste, FastClip3
+- 压缩解压: keka, The
+- 视频播放: IINA
+- PDF 阅读器: PDF export, Acrobat
+- 菜单栏管理:  bartender
+- 磁盘清理: 腾讯柠檬清理
+- 快捷键提示: cheatsheet
+- 截屏: snipaste
+- 文本编译器: sublime, vscode
+- MD 编辑器: Typora, Zettlr
+  - 主题: https://github.com/Theigrams/My-Typora-Themes
+- 效率: alfred
+- 下载: fdm, ndm,Downie4
+- 电池保护: AIDente
 
 
 
@@ -168,6 +174,89 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 source ~/.zshrc
 ```
 
+## npm
+
+```shell
+brew install npm
+# 将npm的镜像源设置为淘宝镜像源
+npm install -g cnpm --registry=https://registry.npm.taobao.org
+```
+
+
+
+## 图床
+
+1. 安装 picgo - core
+
+```shell
+cnpm install picgo -g
+# 验证安装是否成功
+picgo -v
+```
+
+2. 安装上传插件
+
+```shell
+picgo set uploader
+```
+
+3. 修改配置文件: ~/.picgo/config.json
+4. typora 配置
+
+- 上传服务: 选择 Custom Command
+- 命令:  /opt/homebrew/bin/node /opt/homebrew/bin/picgo upload
+
+## ssh连接服务器
+
+1. 在 mac 电脑生成ssh
+
+```shell
+cd ~/.ssh/
+ssh-keygen
+chmod 400 ~/.ssh/id_rsa
+```
+
+2. 创建配置文件
+
+```shell
+# ~/.ssh 目录下
+vim config
+# config文件
+Host web1 # 给服务器ip起一个别名
+Hostname xxxx # 服务器ip
+User root # 服务器用户名
+Port 22 # 服务器端口
+IdentityFile ~/.ssh/id_rsa # 密钥
+```
+
+3. 将 mac 上的文件复制到服务器上
+
+```shell
+scp ~/.ssh/id_rsa.pub web1:/home/
+```
+
+4. 在服务器中进行文件迁移
+
+```shell
+cat /home/id_rsa.pub >> .ssh/authorized_keys
+```
+
+5. 测试
+
+```shell
+ssh web1
+```
+
+
+
+
+
+
+
+
+
+
+
 # 4. 开发环境
 
 ## JDK
@@ -177,6 +266,21 @@ source ~/.zshrc
 > 选 macOS ARM 64-bit v8 版本
 >
 
+多版本 JDK 切换: ~/.zshrc 进行修改
+
+```shell
+# JDK8
+export JAVA_8_HOME="/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home"
+alias jdk8='export JAVA_HOME=$JAVA_8_HOME'
+# JDK18
+export JAVA_18_HOME="/Library/Java/JavaVirtualMachines/zulu-18.jdk/Contents/Home"
+alias jdk18='export JAVA_HOME=$JAVA_18_HOME'
+# 默认 JDK8
+export JAVA_HOME=$JAVA_8_HOME
+```
+
+
+
 ## Maven
 
 安装
@@ -185,41 +289,47 @@ source ~/.zshrc
 brew install maven
 ```
 
-解决无 JAVA_HOME 问题
-
-```
-vim ~/.zshrc
-export JAVA_HOME=$(/usr/libexec/java_home)
-source ~/.zshrc
-```
-
 查看版本
 
 ```
 mvn -v
 ```
 
-换源
+换源: 在 setting.xml 中进行修改
 
 ```xml
 <!-- 
 仓库配置
 -->
-<localRepository>/usr/local/apache-maven-3.8.6/repo</localRepository>
+<localRepository>/opt/homebrew/Cellar/maven/3.8.6/repository</localRepository>
 <!-- 
 换源, 注释掉默认的Maven源，新增aliyun的源
 -->
-<mirror>
-  <id>aliyunmaven</id>
-  <mirrorOf>*</mirrorOf>
-  <name>aliyunpublic</name>
-  <url>https://maven.aliyun.com/repository/public</url>
-</mirror>
+    <mirror>
+      <id>aliyunmaven</id>
+      <mirrorOf>*</mirrorOf>
+      <name>aliyunpublic</name>
+      <url>https://maven.aliyun.com/repository/public</url>
+    </mirror>
 ```
 
 IDEA 配置 Maven
 
+- 修改 Maven home path, User setting file, local repository
+
 ## Mysql
 
+# 5. IDEA 环境
 
+插件:
+
+- jclasslib
+- Key Promoter X
+- Rainbow Brackets
+- translation
+
+开发设置:
+
+- 自动导包:
+- 设置模版: 
 
