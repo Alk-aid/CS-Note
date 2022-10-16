@@ -14,21 +14,44 @@
 
 
 
-- 分屏: rectangle 
-- 剪切板: pasteNow, Paste, FastClip3
-- 压缩解压: keka, The
+- 分屏: rectangle
+
+- 剪切板: FastClip3
+
+- 压缩解压: keka
+
 - 视频播放: IINA
+
 - PDF 阅读器: PDF export, Acrobat
+
 - 菜单栏管理:  bartender
+
 - 磁盘清理: 腾讯柠檬清理
+
 - 快捷键提示: cheatsheet
+
 - 截屏: snipaste
-- 文本编译器: sublime, vscode
-- MD 编辑器: Typora, Zettlr
-  - 主题: https://github.com/Theigrams/My-Typora-Themes
+
+- 文本编译器: sublime, vscode, office三件套
+
+- MD 编辑器: Typora
+  - https://github.com/airyv/typora-theme-redrail
+  
 - 效率: alfred
-- 下载: fdm, ndm,Downie4
-- 电池保护: AIDente
+
+- 下载: fdm, ndm, Downie4
+
+- 电池保护: AIDente, coconuBattery
+
+- 翻译: Bob
+
+- 右键: iRightMouse
+
+- 快速打开应用: Manico
+
+  
+
+
 
 
 
@@ -333,3 +356,26 @@ IDEA 配置 Maven
 - 自动导包:
 - 设置模版: 
 
+## check-style
+
+1. 下载 check-style 插件
+2. 导入配置文件(目前存在 scratch 中)
+3. 添加 git-hook: 需要放到`.git/hooks/` 目录，
+
+```sh
+#!/bin/sh
+#set -x
+
+echo "begin to execute hook"gst
+mvn checkstyle:check
+
+RESULT=$?
+
+exit $RESULT
+```
+
+## 深拷贝
+
+https://juejin.cn/post/7083384279123623966
+
+https://github.com/rookie-ricardo/BeanMappingKey
