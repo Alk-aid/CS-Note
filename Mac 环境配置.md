@@ -14,7 +14,7 @@
 
 
 
-- 分屏: rectangle
+- 分屏: Magnet
 
 - 剪切板: FastClip3
 
@@ -26,7 +26,7 @@
 
 - 菜单栏管理:  bartender
 
-- 磁盘清理: 腾讯柠檬清理
+- 磁盘清理: CleanMyMac X
 
 - 快捷键提示: cheatsheet
 
@@ -35,11 +35,10 @@
 - 文本编译器: sublime, vscode, office三件套
 
 - MD 编辑器: Typora
-  - https://github.com/airyv/typora-theme-redrail
   
 - 效率: alfred
 
-- 下载: fdm, ndm, Downie4
+- 下载: fdm, ndm, Downie4, qBittorrent
 
 - 电池保护: AIDente, coconuBattery
 
@@ -48,6 +47,10 @@
 - 右键: iRightMouse
 
 - 快速打开应用: Manico
+
+- 任务切换: AltTab
+
+- 监控: istat Menus
 
   
 
@@ -350,6 +353,9 @@ IDEA 配置 Maven
 - Key Promoter X
 - Rainbow Brackets
 - translation
+- MyBatis Log Plugin
+- GsonFormat
+- 
 
 开发设置:
 
@@ -379,3 +385,22 @@ exit $RESULT
 https://juejin.cn/post/7083384279123623966
 
 https://github.com/rookie-ricardo/BeanMappingKey
+
+## 自动热部署
+
+- 导入 devtools
+- 打开【File】，选择【settings...】,在面板左侧的菜单中找到【Compile】选项，然后勾选【Build project automatically】
+- 使用快捷键【Ctrl】+【Alt】+【Shit】+【/】打开维护面板，选择第1项【Registry...】
+- 在选项中搜索comple，然后勾选对应项即可: compiler.automake.allow.when.app.running
+- 配置不参与热更新的文件夹
+
+```yaml
+spring:
+  devtools:
+    restart:
+      # 设置不参与热部署的文件或文件夹
+      exclude: static/**,public/**,config/application.yml
+```
+
+
+

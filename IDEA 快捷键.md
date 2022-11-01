@@ -9,16 +9,11 @@ project struct: Command + ;
 - 新增 Test: Command + Shift + T
 ```
 
-查找内容:
+查找 & 替换:
 
 ```markdown
 - 在多文件中寻找: Command + Shift + F
 - 在本文件中寻找: Command + F
-```
-
-替换
-
-```markdown
 - 在多文件中寻找: Command + Shift + R
 - 在本文件中寻找: Command + R
 ```
@@ -37,7 +32,7 @@ project struct: Command + ;
 - 查看参数信息: Command + P
 - 查看源码: Command + B / Command + ↓
 - 查看实现: Command + option + B
-- 查看继承: control + H
+- 查看继承: control + H 
 - collapse all: command + shift + -
 - Expand all: command + shift + +
 ```
@@ -55,8 +50,7 @@ project struct: Command + ;
 运行:
 
 ```markdown
-- 运行当前光标所在方法: control + shift + r
-- debug 当前光标所在方法: control + shift + d
+- run | debug 当前光标所在方法: option + 回车
 ```
 
 重构: 
