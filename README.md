@@ -1,24 +1,18 @@
 ```angular2html
-├── 0. 实习总结
-│   ├── EBS_Log.md
-│   ├── EBS_Machine_Learning.md
-│   ├── EBS_架构.md
-│   └── 实习总结.md
 ├── 1. Java
 │   ├── 1. SE
-│   │   ├── 1. 基础.md
-│   │   └── 2. Java 新特性.md
+│   │   ├── 1. Basis.md
+│   │   └── 2. New Feature.md
 │   ├── 2. EE
-│   │   ├── 1. IOC.md
-│   │   ├── 6. 面经.md
-│   │   ├── 使用篇
+│   │   ├── 1. Mybatis.md
+│   │   ├── 2. SpringBoot.md
+│   │   ├── 3. Spring原理.md
 │   │   ├── 原理篇
-│   │   └── 源码分析
+│   │   └── 杂项.md
 │   ├── 3. Container
-│   │   ├── 1. 集合使用篇.md
-│   │   ├── 2. List & Queue.md
-│   │   ├── 3. Map & Set.md
-│   │   └── 4. 面经.md
+│   │   ├── 1. List & Queue.md
+│   │   ├── 2. Map & Set.md
+│   │   └── 3. 面经.md
 │   ├── 4. JVM
 │   │   ├── 1. Class文件解析.md
 │   │   ├── 2. 字节码指令集.md
@@ -43,13 +37,11 @@
 │   │   ├── 1. IO Basic.md
 │   │   ├── 2. BIO.md
 │   │   ├── 3. NIO.md
-│   │   ├── 4. Netty.md
-│   │   └── 5. 面经.md
+│   │   └── 4. Netty.md
 │   ├── 7. Refactoring
 │   │   ├── 1. Effective Java.md
 │   │   └── DDD.md
 │   └── 8. Third Part
-│       ├── 1. Log.md
 │       └── Draft.md
 ├── 2. DataBase
 │   ├── DS Concepts
@@ -64,18 +56,18 @@
 │   │   ├── 1. SQL基础.md
 │   │   ├── 10. 分库分区分表.md
 │   │   ├── 11. 面经.md
-│   │   ├── 2. 体系架构.md
-│   │   ├── 3. 索引.md
-│   │   ├── 4. 事务.md
-│   │   ├── 5. 锁.md
-│   │   ├── 6. 日志.md
+│   │   ├── 2. Architecture.md
+│   │   ├── 3. Index.md
+│   │   ├── 4. Transaction.md
+│   │   ├── 5. Lock.md
+│   │   ├── 6. Log.md
 │   │   ├── 7. 优化.md
 │   │   ├── 8. InnoDB结构.md
-│   │   ├── 9. 主从复制.md
+│   │   ├── 9. Replication.md
 │   │   └── 杂项
 │   └── Redis
-│       ├── 1. Redis数据结构.md
-│       ├── 2. Redis对象.md
+│       ├── 1. Data Structure.md
+│       ├── 2. Data Type.md
 │       ├── 3. 单机数据库的实现.md
 │       ├── 4. 多机数据库的实现.md
 │       ├── 5. 杂项.md
@@ -95,10 +87,9 @@
 │   │   ├── 7. 进程间通信.md
 │   │   ├── 8. 同步原语.md
 │   │   ├── 9. 文件系统.md
-│   │   ├── Three Easy Piece
 │   │   └── 考研版本
 │   ├── 2. NetWork
-│   │   ├── 1. 基础.md
+│   │   ├── 1. Basic.md
 │   │   ├── 2. HTTP.md
 │   │   ├── 3. TCP.md
 │   │   ├── 4. IP.md
@@ -111,7 +102,6 @@
 │   │   ├── 3. 结构型模式.md
 │   │   ├── 4. 行为型模式.md
 │   │   └── 5. Spring设计模式.md
-│   ├── 4. Design Pattern.md
 │   ├── 5. Compiler Principles
 │   │   ├── 1. Introduction.md
 │   │   ├── 3. Lexical Analysis.md
@@ -125,10 +115,8 @@
 │   ├── 3. Git.md
 │   ├── 4. Docker.md
 │   ├── 5. Maven.md
-│   ├── 6. Nginx.md
-│   └── 7. lvs.md
+│   └── 6. Nginx.md
 ├── 5. Algorithm
-│   ├── 1. 排序.md
 │   ├── 10. 数学.md
 │   ├── 11. 位运算.md
 │   ├── 12. Sum.md
@@ -136,7 +124,6 @@
 │   ├── 2. 搜索.md
 │   ├── 2. 链表.md
 │   ├── 3. 动态规划.md
-│   ├── 4. 二分.md
 │   ├── 5. 数据结构.md
 │   ├── 7. 双指针.md
 │   ├── 8. 二叉树.md
@@ -145,6 +132,7 @@
 │       ├── 1. 排序.md
 │       ├── 10. 动态规划.md
 │       ├── 11.贪心.md
+│       ├── 12. 高精度.md
 │       ├── 2. 二分.md
 │       ├── 3. 前缀和 & 差分.md
 │       ├── 4. 双指针.md
@@ -154,44 +142,33 @@
 │       ├── 8. 搜索 & 图论.md
 │       └── 9. 数学知识.md
 ├── 6. Distributed
-│   ├── 1. Message Queue
-│   │   ├── 1. MQ.md
-│   │   ├── 2. RabbitMQ.md
-│   │   ├── 3. RocketMQ.md
-│   │   └── 4. Kafka.md
-│   ├── 2. Registration Center
-│   │   └── 1. Zookeeper.md
-│   ├── 3. Distributed Framework
+│   ├── 0. Theory
+│   │   ├── 6.824
+│   │   ├── DDIA
+│   │   └── 分布式理论.md
+│   ├── 1. RPC
 │   │   ├── 1. RPC.md
-│   │   ├── 2. Dubbo.md
-│   │   └── 3. SpringCloud.md
-│   ├── 6. Distributed Search
+│   │   └── 2. Dubbo.md
+│   ├── 2. Register & Config
+│   │   ├── 2. Nacos.md
+│   │   └── 3. Zookeeper.md
+│   ├── 3. MQ
+│   │   ├── 1. MQ.md
+│   │   ├── 2. RocketMQ.md
+│   │   ├── 3. Kafka.md
+│   │   └── 4. RabbitMQ.md
+│   ├── 4. Monitor
+│   │   └── 4. Sentinel.md
+│   ├── 5. Search
 │   │   ├── 1. ES.md
-│   │   ├── ElasticSearch.md
-│   │   ├── hotel-demo
-│   │   ├── ik
-│   │   └── tb_hotel.sql
-│   ├── 7. 6.824
-│   │   └── 1. Map Reduce.md
-│   ├── DDIA
-│   │   └── 1. 数据系统的基石.md
-│   ├── RPC.md
-│   ├── 分布式实践.md
-│   └── 分布式理论.md
-├── 7. Machine Learing
-│   ├── 1. Basic.md
-│   ├── 1. Draft.md
-│   ├── 2. KNN.md
-│   ├── 3. Decision Tree.md
-│   ├── 4. 朴素贝叶斯.md
-│   ├── 5. 逻辑回归.md
-│   ├── 6. SVM.md
-│   ├── 7. ensemble method.md
-│   ├── 8. KMeans.md
-│   ├── Drain.md
-│   └── Text Matching
-│       ├── Draft.md
-│       └── Learing.md
+│   │   └── ElasticSearch.md
+│   ├── 6. Transaction
+│   │   └── 5. Seata.md
+│   ├── 7. GateWay
+│   ├── SpringCloud.md
+│   └── 分布式实践.md
+├── 7. Big Data
+│   └── 1. Hadoop.md
 ├── 8. System Design
 │   ├── 1. Big Data.md
 │   ├── 2. Load Balance.md
@@ -210,11 +187,19 @@
 │   │   ├── 5. unittest.md
 │   │   ├── 6. apscheduler.md
 │   │   └── 7. 应用.md
-│   └── 3. Front-End
-│       └── 1. FrontEnd.md
-├── IDEA 快捷键.md
-├── Mac 环境配置.md
-├── README.md
-├── TODO.md
-└── 杂项.md
+│   ├── 3. Front-End
+│   │   └── 1. FrontEnd.md
+│   └── 7. Machine Learing
+│       ├── 1. Basic.md
+│       ├── 1. Draft.md
+│       ├── 2. KNN.md
+│       ├── 3. Decision Tree.md
+│       ├── 4. 朴素贝叶斯.md
+│       ├── 5. 逻辑回归.md
+│       ├── 6. SVM.md
+│       ├── 7. ensemble method.md
+│       ├── 8. KMeans.md
+│       ├── Drain.md
+│       └── Text Matching
+└── README.md
 ```
